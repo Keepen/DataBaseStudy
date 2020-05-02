@@ -1,0 +1,72 @@
+MySQL：
+配置文件：
+/etc/mt.cnf
+
+服务端将mysqld进程放到内存中执行，就是启动了MySQL服务
+
+上层：server层
+	1.连接层：
+		1）检查客户端请求是否合法
+		2）确定连接协议（TCP/IP，进程间通信）
+		3）创建一个线程和客户端通信
+	2.SQL层：处理sql语句：
+		1）语法检测；
+		2）语义检查（权限）；
+		3）解析预处理
+		4）优化器：选择最优方案并执行
+		告诉存储引擎，应该在磁盘上哪个地方取数据
+	3.查询缓存：当页表来理解
+		1）记录日志：记录修改记录
+		
+下层：引擎层（存储引擎）（Linux的文件系统）
+
+逻辑结构：库（相当于Linux目录） -- 表（相当于Linux文件）
+	磁盘：扇区 -> block -> 页 -> 区 -> 段
+		扇区大小：512B
+		block：4K
+		页：将连续的若干个block组成一页--16K
+		区：连续的64页组成一个区 -- 1M
+		段：将若干个可能连续的区组成一个段
+	MySQL中的表由段组成
+	
+	
+DDL 定义数据库
+DML 表的增、删、改、查	
+	DQL：数据库查询语言
+DCL 数据库控制
+	
+字符集：默认utf8
+字符校验规则：
+
+
+数据库基本操作：
+	创建：
+		create database db_name charset=utf8;
+	修改：
+		alter database ...
+	查找：
+		查看系统有哪些数据库：
+			show databases;
+		查看一个数据库的创建信息：
+			show create database db_name;
+	删除：
+		drop database db_name;
+	备份：
+		mysqldump -P3306 -uroot -p[密码] shop > shop.sql
+
+
+
+
+
+
+	
+	
+
+
+
+
+
+
+
+
+
