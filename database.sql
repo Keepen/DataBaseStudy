@@ -144,12 +144,62 @@ DCL 数据库控制
 		1）asc 升序	-- 默认
 		2）desc 降序
 		limit
+		1）limit n 		--前n行
+		2）limit s,n 	--从s行开始，前n行
+		
+	内连接：
+		select * from A (inner) join B on 条件;
+		A 交 B
+	外连接：
+		select *from A left join B 
+		A
+		select * from A right join B
+		B
+MySQL的索引：
+	1.聚簇索引
+		构建聚簇索引的前提：
+			1）设置了主键列 -- 主键列就是聚簇索引
+			2）没有主键列，选择唯一索引的列作为聚簇索引
+			3）前两者都没有，MySQL会自动增加一列作为聚簇索引列
+		作用：
+			1）在存放数据时，会按照聚簇索引进行排序放到磁盘上
+	2.辅助索引：
+		将经常作为查询条件的列设置成辅助索引，需要手动添加
+		1）在建表的最后加上 index(列名)
+		2）alter table 表名 add index(列)
+		3）create index 索引名 on 表名(列)
+	3.单列索引和联合索引：
+		如果是联合索引，查询时的最左原则：
+		eg：
+			alter table test add index(a,b,c);
+		--走索引	
+			select * from test where a=xxx;
+			select * from test where a=xxx and b=xxx;
+			select * from test where a... b... c...;
+			select * from test where c,b,a;		--会被优化器优化成a,b,c
+		--不走索引	
+			select * from test where b,c;
+	4.查看索引：
+		desc 表名;
+		show index from 表名;
+	原则：
+		1.经常在where后作为查询条件的列
+		2.列的数据尽可能地不要重复
+		3.索引不是建地越多越好，因为会消耗磁盘空间
+	5.查看查询是否走索引
+		explain + 查询语句
+		在type那一列可以得到结果：
+			all -- 全表扫描，
+				1）不加where；
+				2）like “%..”都是不走索引
+				3）not in (...) 不是主键列时，不走索引
+			ref -- 走索引
+			index  		< 	range 	< 	ref 	< 	eq_ref 		< 	const	效率依次变高
+			全索引扫描	  范围查找	  等值查询   多表驱动表是主键    聚簇索引等值查询
 		
 		
 		
 		
-	
-	
 存储引擎：
 	
 
